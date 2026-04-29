@@ -12,8 +12,11 @@
     "docker_images": {
         "Node.js 25 (Current)": "ghcr.io/yuracloud/nodejs:25",
         "Node.js 24 (LTS)": "ghcr.io/yuracloud/nodejs:24",
+        "Node.js 23 (Stable)": "ghcr.io/yuracloud/nodejs:23",
         "Node.js 22 (LTS)": "ghcr.io/yuracloud/nodejs:22",
+        "Node.js 21 (Old)": "ghcr.io/yuracloud/nodejs:21",
         "Node.js 20 (LTS)": "ghcr.io/yuracloud/nodejs:20",
+        "Node.js 19 (Old)": "ghcr.io/yuracloud/nodejs:19",
         "Node.js 18 (LTS)": "ghcr.io/yuracloud/nodejs:18"
     },
     "file_denylist": [],
