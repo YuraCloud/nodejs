@@ -1,0 +1,65 @@
+{
+    "_comment": "DO NOT EDIT: FILE GENERATED AUTOMATICALLY BY PTERODACTYL PANEL",
+    "meta": {
+        "version": "PTDL_v2",
+        "update_url": null
+    },
+    "exported_at": "2024-06-02T14:43:56+00:00",
+    "name": "Node.js Custom (Universal Pro)",
+    "author": "dapaupau@sigaul.com",
+    "description": "Pro-tier Node.js egg by YuraCloud. Optimized for performance, auto-updates, and full customization.",
+    "features": null,
+    "docker_images": {
+        "Node.js 25 (Current)": "ghcr.io/yuracloud/nodejs:25",
+        "Node.js 24 (LTS)": "ghcr.io/yuracloud/nodejs:24",
+        "Node.js 22 (LTS)": "ghcr.io/yuracloud/nodejs:22",
+        "Node.js 20 (LTS)": "ghcr.io/yuracloud/nodejs:20"
+    },
+    "file_denylist": [],
+    "startup": "if [ -d .git ] && [ \"${AUTO_UPDATE}\" == \"1\" ]; then git pull; fi; if [ -f package.json ]; then npm install; fi; exec ${CMD_RUN}",
+    "config": {
+        "files": "{}",
+        "startup": "{\r\n    \"done\": \"Server started on\"\r\n}",
+        "logs": "{}",
+        "stop": "^^C"
+    },
+    "scripts": {
+        "installation": {
+            "container": "alpine:3.18",
+            "entrypoint": "sh",
+            "script": "#!/bin/sh\napk add --no-cache curl git nodejs npm\ncd /mnt/server\n\nif [ ! -f package.json ]; then\ncat << 'EOF' > package.json\n{\n  \"name\": \"yuracloud-app\",\n  \"version\": \"1.0.0\",\n  \"description\": \"Node.js application on YuraCloud\",\n  \"main\": \"index.js\",\n  \"scripts\": {\n    \"start\": \"node index.js\"\n  },\n  \"author\": \"YuraCloud\",\n  \"license\": \"ISC\"\n}\nEOF\nfi\n\nif [ -f package.json ]; then\n    npm install\nfi\n\nif [ ! -f index.js ]; then\ncat << 'EOF' > index.js\nconst http = require('http');\n\nconst port = process.env.PORT || process.env.SERVER_PORT || 8080;\n\nconst server = http.createServer((req, res) => {\n  res.statusCode = 200;\n  res.setHeader('Content-Type', 'text/plain');\n  res.end('Hello from YuraCloud Node.js!\\\\n');\n});\n\nserver.listen(port, () => {\n  console.log(`Server started on :${port}`);\n});\nEOF\nfi\n\n# --- Auto-detect Region ---\nDETECTED_REGION=$(curl -s http://ip-api.com/line?fields=country | head -n 1)\nif [ -z \"$DETECTED_REGION\" ]; then DETECTED_REGION=\"Unknown\"; fi\n\n# --- Branding and Information ---\necho \"\"\necho \"==================================================\"\necho \"                  YuraCloud                       \"\necho \"==================================================\"\necho \"Informasi Server:\"\necho \"UUID      : ${P_SERVER_UUID}\"\necho \"Region    : ${DETECTED_REGION}\"\necho \"Port      : ${SERVER_PORT}\"\necho \"Egg Type  : Node.js\"\necho \"==================================================\"\necho \"    Terima kasih sudah membeli di YuraCloud!      \"\necho \"==================================================\"\necho \"\""
+        }
+    },
+    "variables": [
+        {
+            "name": "Command Run",
+            "description": "The command that will be executed to start your application.",
+            "env_variable": "CMD_RUN",
+            "default_value": "node index.js",
+            "user_viewable": true,
+            "user_editable": true,
+            "rules": "required|string",
+            "field_type": "text"
+        },
+        {
+            "name": "Node Version",
+            "description": "Select the Node.js version to display (Note: Depends on Docker image tag).",
+            "env_variable": "NODE_VERSION",
+            "default_value": "25",
+            "user_viewable": true,
+            "user_editable": true,
+            "rules": "required|string",
+            "field_type": "text"
+        },
+        {
+            "name": "Auto Update",
+            "description": "Pull latest changes from git on startup if .git exists.",
+            "env_variable": "AUTO_UPDATE",
+            "default_value": "0",
+            "user_viewable": true,
+            "user_editable": true,
+            "rules": "required|boolean",
+            "field_type": "text"
+        }
+    ]
+}
