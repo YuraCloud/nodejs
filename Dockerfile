@@ -1,4 +1,4 @@
-ARG         NODE_VERSION=22
+ARG         NODE_VERSION=25
 FROM        --platform=$TARGETOS/$TARGETARCH node:${NODE_VERSION}-alpine
 
 LABEL       author="dapaupau@sigaul.com" maintainer="dapaupau@sigaul.com"
